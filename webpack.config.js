@@ -1,14 +1,18 @@
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+/*
+使用clean替换
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+*/
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   mode: 'development',
   entry: path.resolve(__dirname, './src/main.js'),
   output: {
+    clean: true,
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/[name].js'
+    filename: 'js/[name].js',
   },
   resolve: {
     alias: {
@@ -28,16 +32,24 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ]
-      }
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'less-loader'
+        ]
+      },
     ]
   },
   plugins: [
+    // new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './public/index.html'),
       filename: 'index.html',
       title: 'vue2+webpack'
     }),
-    new CleanWebpackPlugin(),
     new VueLoaderPlugin(),
   ],
   devServer: {
